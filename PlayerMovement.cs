@@ -8,11 +8,13 @@ public class PlayerMovement : MonoBehaviour
 {
     // Necessary for animations and physics
     private Rigidbody2D rb2D;
-    private Animator myAnimator; // 1, -1, 0
+    private Animator myAnimator;
+
+    private bool facingRight = true;
 
     // Variable to play with
     public float speed = 2.0f;
-    public float horizMovement;
+    public float horizMovement; // 1, -1, 0
 
     private void Start()
     {
@@ -33,5 +35,20 @@ public class PlayerMovement : MonoBehaviour
     {
         // Move the character left and right
         rb2D.velocity = new Vector2(horizMovement*speed, rb2D.velocity.y);
+        Flip(horizMovement);
+        myAnimator.SetFloat("speed", Mathf.Abs(horizMovement));
+    }
+
+    // Flipping function
+    private void Flip(float horizontal)
+    {
+        if (horizontal < 0 && facingRight || horizontal > 0 && !facingRight)
+        {
+            facingRight = !facingRight;
+            
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;   
+        }
     }
 }
